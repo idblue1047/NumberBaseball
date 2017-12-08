@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/rank_num_xml"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="117위"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/username_xml"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="7dp"
+        android:text="이름들.10글자까지"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/times_xml"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="27번"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/playtimes_xml"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16dp" />
+
+</LinearLayout>
