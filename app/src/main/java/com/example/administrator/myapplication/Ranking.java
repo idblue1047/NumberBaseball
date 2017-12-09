@@ -2,12 +2,15 @@ package com.example.administrator.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -17,11 +20,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Ranking extends AppCompatActivity implements View.OnClickListener {
 
-    public static int type_number = 3;
+    public static int game_type = 3;
 
     public static ArrayList<Rank_base> Origins = new ArrayList<Rank_base>();
 
@@ -39,6 +44,10 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
     RecyclerView recyclerview_ranking;
     RecyclerViewAdapter2 recyclerViewAdapter;
     RecyclerView.LayoutManager recylerViewLayoutManager;
+
+    Intent i = getIntent();
+    public Button type_a;
+    public Button type_b;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,13 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
         recyclerview_ranking.setLayoutManager(recylerViewLayoutManager);
         recyclerViewAdapter = new RecyclerViewAdapter2(context, list);
         recyclerview_ranking.setAdapter(recyclerViewAdapter);
+
+        //3구를 끝내고 랭킹으로 오면 3구 랭킹을, 4구는 4구 랭킹을 보여주기 위해 값을 받아옴.
+        Intent intent = getIntent();
+        game_type = intent.getIntExtra("GAMETYPE", 3);
+
+
+        Button_Select();
 
 
         final DatabaseReference testing = FirebaseDatabase.getInstance().getReference("users");
@@ -80,6 +96,34 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
 
                 Origins.clear();
                 Origins.addAll(recyclerViewAdapter.getSubjectValues());
+
+                final Handler mhandler = new Handler();
+                TimerTask tt = new TimerTask() {
+                    @Override
+                    public void run() {
+                        mhandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listsetup();
+                                ArrayList<Rank_base> arrayList =  recyclerViewAdapter.getSubjectValues();
+
+                                ArrayList<Rank_base> arrayList_match = new ArrayList<>();
+
+                                for(int k=0; k<arrayList.size(); k++) {
+                                    if ( arrayList.get(k).type == game_type ) {
+                                        arrayList_match.add(arrayList.get(k));
+                                    }
+                                }
+                                recyclerViewAdapter.setSubjectValues(arrayList_match);
+                                String tmp = "";
+                                recyclerViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(tt, 0000);
+
 
             }
 
@@ -108,6 +152,9 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
 //        }
 
         if(R.id.type_a == v.getId()) {
+            game_type = 3;
+            type_a.setBackgroundColor(Color.WHITE);
+            type_b.setBackgroundColor(Color.GRAY);
             listsetup();
             ArrayList<Rank_base> arrayList =  recyclerViewAdapter.getSubjectValues();
 
@@ -125,6 +172,7 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
 
             String tmp = "";
         } else if(R.id.type_b == v.getId()) {
+            game_type = 4;
             listsetup();
             ArrayList<Rank_base> arrayList =  recyclerViewAdapter.getSubjectValues();
 
@@ -139,6 +187,7 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
             recyclerViewAdapter.setSubjectValues(arrayList_match);
             String tmp = "";
         }
+        Button_Select();
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -185,6 +234,28 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    public void Button_Select()
+    {
+        type_a = (Button)findViewById(R.id.type_a);
+        type_b = (Button)findViewById(R.id.type_b);
+
+        if (game_type == 3)
+        {
+            type_a.setBackgroundColor(Color.WHITE);
+            type_a.setTextSize(18);
+            type_b.setBackgroundColor(Color.GRAY);
+            type_b.setTextSize(14);
+        }
+        else if (game_type == 4)
+        {
+
+            type_a.setBackgroundColor(Color.GRAY);
+            type_a.setTextSize(14);
+            type_b.setBackgroundColor(Color.WHITE);
+            type_b.setTextSize(18);
+        }
     }
 
 }

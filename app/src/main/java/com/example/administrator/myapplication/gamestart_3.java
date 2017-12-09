@@ -2,6 +2,7 @@ package com.example.administrator.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -52,6 +53,9 @@ public class gamestart_3 extends AppCompatActivity {
     RelativeLayout relativeLayout;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recylerViewLayoutManager;
+
+    public Timer timer2 = new Timer();
+    public Timer timer = new Timer();
 //    String[] subjects = {};
 
     public int game_type = 3;//이 클래스의 게임은 숫자 3개를 이용하는 숫자야구다.
@@ -130,17 +134,37 @@ public class gamestart_3 extends AppCompatActivity {
                         }
                         if (startcounter < 4) {
                             TextTimer.setText("0분 0초");
-                        } else
+                        }
+                        else{
                             TextTimer.setText(String.valueOf(gametimer / 60) + "분 " + String.valueOf(gametimer % 60) + "초");
+                            if(number_first.getText().toString().equals("?")) {
+                                if (startcounter % 2 == 0) number_first.setTextColor(Color.RED);
+                                else if (startcounter % 2 == 1) number_first.setTextColor(Color.YELLOW);
+                            }
+                            else {
+                                number_first.setTextColor(Color.BLACK);
+                                if (number_second.getText().toString().equals("?")) {
+                                    if (startcounter % 2 == 0) number_second.setTextColor(Color.RED);
+                                    else if (startcounter % 2 == 1) number_second.setTextColor(Color.YELLOW);
+                                }
+                                else {
+                                    number_second.setTextColor(Color.BLACK);
+                                    if (number_third.getText().toString().equals("?")) {
+                                        if (startcounter % 2 == 0) number_third.setTextColor(Color.RED);
+                                        else if (startcounter % 2 == 1) number_third.setTextColor(Color.YELLOW);
+                                        else number_third.setTextColor(Color.BLACK);
+                                    }
+                                }
+                            }
+                        }
                         //게임 시작 후 경과시간 출력
-
                         startcounter++;
                         Log.v("알림", "타이머 종료");
                     }
                 });
             }
         };
-        Timer timer = new Timer();
+
         timer.schedule(tt, 0, 1000);
 
         //////////////////////////////시작 타이머 끝/////////////////////////////////////////////////////////
@@ -246,6 +270,11 @@ public class gamestart_3 extends AppCompatActivity {
                             + input_first + input_second + input_third + " " + String.valueOf(strike)
                             + "<font color = 'blue'>S</font> " + String.valueOf(ball) + "<font color = 'red'>B</font>"));
                     list.add(tesing);
+                    TextView[] textview = {number_first, number_second, number_third};
+                    for(int i=0; i < textview.length;i++){
+                        textview[i].setText("?");
+                        textview[i].setTextColor(Color.BLACK);
+                    }
 
                     /////////////////////////////모두 스트라이크가 되어서 게임을 종료/////////////////////////
                     if(strike == 3) {//게임 종료 후 메뉴 출력. 랭킹 등록, 나가기, 새로 시작하기 등을 제공.
@@ -285,9 +314,13 @@ public class gamestart_3 extends AppCompatActivity {
                         View.OnClickListener rankinput = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String username = nameedit.getText().toString();
-                                writeNewUser(game_type, username, gameover_times, gameover_playtimes);
-                                rank_move();
+                                if(nameedit.getText().toString().equals(""))
+                                    Toast.makeText(gamestart_3.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                else {
+                                    String username = nameedit.getText().toString();
+                                    writeNewUser(game_type, username, gameover_times, gameover_playtimes);
+                                    rank_move();
+                                }
                             }
                         };
                         ranking_input.setOnClickListener(rankinput);
@@ -318,30 +351,86 @@ public class gamestart_3 extends AppCompatActivity {
     public void onBackPressed()//메뉴 화면 만들고 누르면 뜨게 하자.
     {
         if (startcounter < 5) ;//게임 시작 카운트 중에는 뒤로가기 버튼을 먹통으로 만듬.
-        else {
-            //  ////////////////이 부분은 메뉴를 띄우게 하고 나가기 버튼에다가 복붙하면 될 듯
-            Intent mainmove = new Intent(this, MainActivity.class);
-            startActivity(mainmove);
-            finish();
+        else{
+            if(menu_on == false){
+                menu_on = true;
+                menu_start();
+            }
+            else if (menu_on == true){
+                menu_on = false;
+                timer2.cancel();
+                menu_start();
+            }
+        }
+    }
+    public void menu_click(View v){
+        if (startcounter < 5) ;//게임 시작 카운트 중에는 메뉴 버튼을 먹통으로 만듬.
+        else{
+            if(menu_on == false){
+                menu_on = true;
+                menu_start();
+            }
+            else if (menu_on == true){
+                menu_on = false;
+                menu_start();
+            }
         }
     }
 
 
-//    public void Click_Input(View v){
-//        input_number_first = Integer.parseInt(number_first.getText().toString());//String을 int로 변환
-//        input_number_second = Integer.parseInt(number_second.getText().toString());
-//        input_number_third = Integer.parseInt(number_third.getText().toString());
-//        RecyclerViewAdapter.notifyDataSetChanged();
-//        DataModel tesing = new DataModel("test 해보고 있는 중.");
-//        list.add(tesing);
-//
-//    }
+
+    public void menu_start(){
+        final ConstraintLayout menu = (ConstraintLayout) findViewById(R.id.menu_layout);
+        final ConstraintLayout screen_dark2 = (ConstraintLayout) findViewById(R.id.screen_dark);
+
+        final TextView TextTimer = (TextView)findViewById(R.id.timer_1);
+        final Handler mHandler2 = new Handler();
+        final int[] startcounter2 = {startcounter};
+
+
+
+        if (menu_on == true) {
+            timer.cancel();
+            timer2.cancel();
+
+            screen_dark2.setVisibility(View.VISIBLE);
+            menu.setVisibility(View.VISIBLE);
+            menu.bringToFront();
+        } else if(menu_on == false){
+            timer2 = new Timer();
+            TimerTask abcd = new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler2.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (startcounter < 4) {
+                                TextTimer.setText("0분 0초");
+                            } else
+                                TextTimer.setText(String.valueOf((startcounter-4) / 60) + "분 " + String.valueOf((startcounter-4) % 60) + "초");
+                            //게임 시작 후 경과시간 출력
+
+                            startcounter++;
+                            Log.v("알림", "타이머 종료");
+                        }
+                    });
+                }
+            };
+            timer2.schedule(abcd, 0, 1000);
+
+            screen_dark2.setVisibility(View.INVISIBLE);
+            menu.setVisibility(View.INVISIBLE);
+        }
+
+    }
 
     public void Click_Delete(View v)//텍스트뷰에 있는 글자들을 모두 초기 상태로 돌림.
     {
-        number_first.setText("?");
-        number_second.setText("?");
-        number_third.setText("?");
+        TextView[] textview = {number_first, number_second, number_third};
+        for(int i=0; i < textview.length;i++){
+            textview[i].setText("?");
+            textview[i].setTextColor(Color.BLACK);
+        }
     }
     public void game3_move(View v)
     {
@@ -365,6 +454,7 @@ public class gamestart_3 extends AppCompatActivity {
     public void rank_move()
     {
         Intent rankmove = new Intent(this, Ranking.class);
+        rankmove.putExtra("GAMETYPE", game_type);
         startActivity(rankmove);
         finish();
     }

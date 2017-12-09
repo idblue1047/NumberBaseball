@@ -2,7 +2,6 @@ package com.example.administrator.myapplication;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +23,6 @@ public class RecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerViewAdapt
 //    TextView times;
 //    TextView playtimes;
 
-
-//    public void add(DataModel text)
-//    {
-//        SubjectValues.add(text);
-//        notifyDataSetChanged();
-//    }
 
 
     public ArrayList<Rank_base> getSubjectValues() {
@@ -96,7 +89,7 @@ public class RecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerViewAdapt
             Log.d("_test", "전역: " + Ranking.type_number + " , 1");
         }
         */
-        Log.d("_test", "전역: " + Ranking.type_number + " , 3");
+//        Log.d("_test", "전역: " + Ranking.type_number + " , 3");
 //        String msg_rank = position+"위";
 //        String msg_username = rank_base.username;
 //        String msg_times = rank_base.times + "번" ;

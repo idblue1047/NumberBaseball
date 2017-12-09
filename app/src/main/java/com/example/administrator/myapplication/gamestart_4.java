@@ -2,6 +2,7 @@ package com.example.administrator.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -58,6 +59,14 @@ public class gamestart_4 extends AppCompatActivity {
     RecyclerView.LayoutManager recylerViewLayoutManager;
     String[] subjects = {};
 
+
+    public Timer timer = new Timer();
+    public Timer timer2 = new Timer();
+
+    public TimerTask tt;
+
+    public int gametimer = startcounter - 4;
+
     public int game_type = 4;//이 클래스의 게임은 숫자 3개를 이용하는 숫자야구다.
 
     public boolean menu_on = false;
@@ -66,6 +75,7 @@ public class gamestart_4 extends AppCompatActivity {
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
+    Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {//최초로 화면이 나올 때 한 번 실행
@@ -98,21 +108,21 @@ public class gamestart_4 extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ConstraintLayout end_menu = (ConstraintLayout)findViewById(R.id.endmenu_xml);
+        ConstraintLayout end_menu = (ConstraintLayout) findViewById(R.id.endmenu_xml);
         end_menu.setVisibility(View.INVISIBLE);
 
         //////////////////////////////시작 3, 2, 1 시작 타이머/////////////////////////////////////////////////
-        final Handler mHandler = new Handler();
+
         final ImageView startcountimage = (ImageView) findViewById(R.id.start_Count_Image);
+
         final ConstraintLayout screen_dark = (ConstraintLayout) findViewById(R.id.screen_dark);
         screen_dark.bringToFront();
         startcountimage.bringToFront();
 
-
         final TextView TextTimer = (TextView) findViewById(R.id.timer_1);
 
-        Log.v("알림", "액티비티3 시작");
-        TimerTask tt = new TimerTask() {
+
+        tt = new TimerTask() {
             @Override
             public void run() {
                 mHandler.post(new Runnable() {
@@ -132,20 +142,52 @@ public class gamestart_4 extends AppCompatActivity {
                             startcountimage.setVisibility(View.INVISIBLE);
                             TextTimer.setVisibility(View.VISIBLE);
                         }
-                        if (startcounter < 4) {
-                            TextTimer.setText("0분 0초");
-                        } else
+                        if (startcounter < 4) TextTimer.setText("0분 0초");
+                        else {
+                            //게임 시작후 경과한 시간을 출력.
                             TextTimer.setText(String.valueOf(gametimer / 60) + "분 " + String.valueOf(gametimer % 60) + "초");
-                        //게임 시작 후 경과시간 출력
 
+                            /////비어있는 텍스트 창이 반짝거리게 함. 칸이 채워졌다면 검정색으로 고정.
+                            if (number_first.getText().toString().equals("?")) {
+                                if (startcounter % 2 == 0) number_first.setTextColor(Color.RED);
+                                else if (startcounter % 2 == 1)
+                                    number_first.setTextColor(Color.YELLOW);
+                            } else {
+                                number_first.setTextColor(Color.BLACK);
+                                if (number_second.getText().toString().equals("?")) {
+                                    if (startcounter % 2 == 0)
+                                        number_second.setTextColor(Color.RED);
+                                    else if (startcounter % 2 == 1)
+                                        number_second.setTextColor(Color.YELLOW);
+                                } else {
+                                    number_second.setTextColor(Color.BLACK);
+                                    if (number_third.getText().toString().equals("?")) {
+                                        if (startcounter % 2 == 0)
+                                            number_third.setTextColor(Color.RED);
+                                        else if (startcounter % 2 == 1)
+                                            number_third.setTextColor(Color.YELLOW);
+                                    }
+                                    else {
+                                        number_third.setTextColor(Color.BLACK);
+                                        if (number_fourth.getText().toString().equals("?")) {
+                                            if (startcounter % 2 == 0)
+                                                number_fourth.setTextColor(Color.RED);
+                                            else if (startcounter % 2 == 1)
+                                                number_fourth.setTextColor(Color.YELLOW);
+                                        }
+                                        else number_fourth.setTextColor(Color.BLACK);
+                                    }
+                                }
+                            }
+                        }
                         startcounter++;
                         Log.v("알림", "타이머 종료");
                     }
                 });
             }
         };
-        Timer timer = new Timer();
         timer.schedule(tt, 0, 1000);
+
 
         //////////////////////////////시작 타이머 끝/////////////////////////////////////////////////////////
 
@@ -153,20 +195,30 @@ public class gamestart_4 extends AppCompatActivity {
         Log.v("알림", "랜덤값 생성");
         final int rn4_1 = (int) (Math.random() * 10);//0~9
         int rn4_2 = (int) (Math.random() * 10);
-        while (true) {
+        while (true)
+
+        {
             if (rn4_2 == rn4_1) rn4_2 = (int) (Math.random() * 10);
             else break;
         }
+
         int rn4_3 = (int) (Math.random() * 10);
-        while (true) {
+        while (true)
+
+        {
             if (rn4_3 == rn4_1 || rn4_3 == rn4_2) rn4_3 = (int) (Math.random() * 9);
             else break;
         }
+
         int rn4_4 = (int) (Math.random() * 10);
-        while (true) {
-            if (rn4_4 == rn4_1 || rn4_4 == rn4_2 || rn4_4 == rn4_3) rn4_4 = (int) (Math.random() * 9);
+        while (true)
+
+        {
+            if (rn4_4 == rn4_1 || rn4_4 == rn4_2 || rn4_4 == rn4_3)
+                rn4_4 = (int) (Math.random() * 9);
             else break;
         }
+
         final String rn4_1s = String.valueOf(rn4_1);//TextView에 바로 int를 못 넣어서 String으로 변환
         final String rn4_2s = String.valueOf(rn4_2);
         final String rn4_3s = String.valueOf(rn4_3);
@@ -191,23 +243,23 @@ public class gamestart_4 extends AppCompatActivity {
         View.OnClickListener btn_number = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (number_first.getText().toString().equals("?"))
-                    number_first.setText(((Button) v).getText().toString());
-                else if (number_second.getText().toString().equals("?"))
-                    if(((Button)v).getText().toString() == number_first.getText().toString()){
-                        Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else number_second.setText(((Button) v).getText().toString());
-                else if (number_third.getText().toString().equals("?"))
-                    if(((Button)v).getText().toString() == number_first.getText().toString() || ((Button)v).getText().toString() == number_second.getText().toString()){
-                        Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else number_third.setText(((Button) v).getText().toString());
-                else if (number_fourth.getText().toString().equals("?"))
-                    if(((Button)v).getText().toString() == number_first.getText().toString() || ((Button)v).getText().toString() == number_second.getText().toString() || ((Button)v).getText().toString() == number_third.getText().toString()){
-                        Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else number_fourth.setText(((Button) v).getText().toString());
+                if (startcounter < 5) ;
+                else {
+                    if (number_first.getText().toString().equals("?"))
+                        number_first.setText(((Button) v).getText().toString());
+                    else if (number_second.getText().toString().equals("?"))
+                        if (((Button) v).getText().toString() == number_first.getText().toString()) {
+                            Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        } else number_second.setText(((Button) v).getText().toString());
+                    else if (number_third.getText().toString().equals("?"))
+                        if (((Button) v).getText().toString() == number_first.getText().toString() || ((Button) v).getText().toString() == number_second.getText().toString()) {
+                            Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        } else number_third.setText(((Button) v).getText().toString());
+                    else if (number_fourth.getText().toString().equals("?"))
+                        if (((Button) v).getText().toString() == number_first.getText().toString() || ((Button) v).getText().toString() == number_second.getText().toString() || ((Button) v).getText().toString() == number_third.getText().toString()) {
+                            Toast.makeText(gamestart_4.this, "중복번호는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        } else number_fourth.setText(((Button) v).getText().toString());
+                }
             }
         };
         btn_0.setOnClickListener(btn_number);
@@ -231,7 +283,7 @@ public class gamestart_4 extends AppCompatActivity {
             @Override
             public void onClick(View v) { //입력 버튼 클릭시의 기능
                 //현재 기능이 1, 2번쨰 숫자가 채워져야 3번째까지 입력이 가능하므로 3번째가 비어있지 않으면 모든 숫자가 채워졌다는 의미.
-                if(number_fourth.getText().toString().equals("?"))
+                if (number_fourth.getText().toString().equals("?"))
                     Toast.makeText(gamestart_4.this, "모든 번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 else {
                     input_num[0] = input_num[0] + 1;
@@ -246,13 +298,17 @@ public class gamestart_4 extends AppCompatActivity {
 
                     // == 는 주소값을 비교하므로 사용할 수 없고 equals을 쓰자.
                     if (rn4_1s.equals(input_first)) strike++;
-                    else if (rn4_2s.equals(input_first) || rn4_3s.equals(input_first) || rn4_4s.equals(input_first)) ball++;
+                    else if (rn4_2s.equals(input_first) || rn4_3s.equals(input_first) || rn4_4s.equals(input_first))
+                        ball++;
                     if (rn4_2s.equals(input_second)) strike++;
-                    else if (rn4_1s.equals(input_second) || rn4_3s.equals(input_second) || rn4_4s.equals(input_second)) ball++;
+                    else if (rn4_1s.equals(input_second) || rn4_3s.equals(input_second) || rn4_4s.equals(input_second))
+                        ball++;
                     if (rn4_3s.equals(input_third)) strike++;
-                    else if (rn4_1s.equals(input_third) || rn4_2s.equals(input_third) || rn4_4s.equals(input_third)) ball++;
+                    else if (rn4_1s.equals(input_third) || rn4_2s.equals(input_third) || rn4_4s.equals(input_third))
+                        ball++;
                     if (rn4_4s.equals(input_fourth)) strike++;
-                    else if (rn4_1s.equals(input_fourth) || rn4_2s.equals(input_fourth) || rn4_3s.equals(input_fourth)) ball++;
+                    else if (rn4_1s.equals(input_fourth) || rn4_2s.equals(input_fourth) || rn4_3s.equals(input_fourth))
+                        ball++;
 
                     String strike_s = String.valueOf(strike);
                     String ball_s = String.valueOf(ball);
@@ -261,20 +317,24 @@ public class gamestart_4 extends AppCompatActivity {
                             + "<font color = 'blue'>S</font> " + String.valueOf(ball) + "<font color = 'red'>B</font>"));
 
                     list.add(tesing);
-                    if(strike == 4) {//게임 종료 후 메뉴 출력. 랭킹 등록, 나가기, 새로 시작하기 등을 제공.
+                    TextView[] textview = {number_first, number_second, number_third, number_fourth};
+                    for(int i=0; i < textview.length;i++){
+                        textview[i].setText("?");
+                        textview[i].setTextColor(Color.BLACK);
+                    }
+                    if (strike == 4) {//게임 종료 후 메뉴 출력. 랭킹 등록, 나가기, 새로 시작하기 등을 제공.
 
                         screen_dark.setVisibility(View.VISIBLE);
-                        ConstraintLayout menu = (ConstraintLayout) findViewById(R.id.endmenu_xml);
-                        menu.setVisibility(View.VISIBLE);
-                        menu.bringToFront();
+                        ConstraintLayout endmenu = (ConstraintLayout) findViewById(R.id.endmenu_xml);
+                        endmenu.setVisibility(View.VISIBLE);
+                        endmenu.bringToFront();
 
-                        final EditText nameedit = (EditText)findViewById(R.id.name_edit);
+                        final EditText nameedit = (EditText) findViewById(R.id.name_edit);
                         nameedit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                             @Override
                             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                                 boolean handled = false;
-                                if (actionId == EditorInfo.IME_ACTION_SEND)
-                                {
+                                if (actionId == EditorInfo.IME_ACTION_SEND) {
                                     handled = true;
                                 }
                                 return handled;
@@ -284,21 +344,25 @@ public class gamestart_4 extends AppCompatActivity {
                         InputFilter[] FilterArray = new InputFilter[1];//EditText에 들어갈 수 있는 글자수를 7글자로 제한
                         FilterArray[0] = new InputFilter.LengthFilter(7);
                         nameedit.setFilters(FilterArray);
-                        TextView number_times = (TextView)findViewById(R.id.number_times);
+                        TextView number_times = (TextView) findViewById(R.id.number_times);
                         number_times.setText("시도 횟수: " + input_num[0] + "회");
 
-                        TextView playtimes = (TextView)findViewById((R.id.play_time_xml));
+                        TextView playtimes = (TextView) findViewById((R.id.play_time_xml));
                         final int gameover_playtimes = startcounter - 4;
                         playtimes.setText("걸린 시간: " + String.valueOf(gameover_playtimes / 60) + "분 " + String.valueOf(gameover_playtimes % 60) + "초");
-                        Button ranking_input = (Button)findViewById(R.id.ranking3_input_button);
+                        Button ranking_input = (Button) findViewById(R.id.ranking3_input_button);
 
 
                         View.OnClickListener rankinput = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String username = nameedit.getText().toString();
-                                writeNewUser(game_type, username, input_num[0], gameover_playtimes);
-                                rank_move();
+                                if (nameedit.getText().toString().equals(""))
+                                    Toast.makeText(gamestart_4.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                else {
+                                    String username = nameedit.getText().toString();
+                                    writeNewUser(game_type, username, gameover_playtimes, gameover_playtimes);
+                                    rank_move();
+                                }
                             }
                         };
                         ranking_input.setOnClickListener(rankinput);
@@ -318,24 +382,86 @@ public class gamestart_4 extends AppCompatActivity {
         };
         btn_input.setOnClickListener(datainput);
 
-        Button ranking_input = (Button)findViewById(R.id.ranking3_input_button);
+        Button ranking_input = (Button) findViewById(R.id.ranking3_input_button);
 
 
         ////////////////////////////onCreate 종료////////////////////////////////////////////////
     }
 
+
     public void onBackPressed()//메뉴 화면 만들고 누르면 뜨게 하자.
     {
         if (startcounter < 5) ;//게임 시작 카운트 중에는 뒤로가기 버튼을 먹통으로 만듬.
         else {
-            //  ////////////////이 부분은 메뉴를 띄우게 하고 나가기 버튼에다가 복붙하면 될 듯
-            Intent mainmove = new Intent(this, MainActivity.class);
-            startActivity(mainmove);
-            finish();
+            if (menu_on == false) {
+                menu_on = true;
+                menu_start();
+            } else if (menu_on == true) {
+                menu_on = false;
+                timer2.cancel();
+                menu_start();
+            }
         }
     }
 
-//    public void Click_Input(View v){
+    public void menu_click(View v) {
+        if (startcounter < 5) ;//게임 시작 카운트 중에는 메뉴 버튼을 먹통으로 만듬.
+        else {
+            if (menu_on == false) {
+                menu_on = true;
+                menu_start();
+            } else if (menu_on == true) {
+                menu_on = false;
+                menu_start();
+            }
+        }
+    }
+
+
+    public void menu_start() {
+        final ConstraintLayout menu = (ConstraintLayout) findViewById(R.id.menu_layout);
+        final ConstraintLayout screen_dark2 = (ConstraintLayout) findViewById(R.id.screen_dark);
+
+        final TextView TextTimer = (TextView) findViewById(R.id.timer_1);
+        final Handler mHandler2 = new Handler();
+        final int[] startcounter2 = {startcounter};
+
+        if (menu_on == true) {
+            timer.cancel();
+            timer2.cancel();
+
+            screen_dark2.setVisibility(View.VISIBLE);
+            menu.setVisibility(View.VISIBLE);
+            menu.bringToFront();
+        } else if (menu_on == false) {
+            timer2 = new Timer();
+            TimerTask abcd = new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler2.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (startcounter < 4) {
+                                TextTimer.setText("0분 0초");
+                            } else
+                                TextTimer.setText(String.valueOf((startcounter - 4) / 60) + "분 " + String.valueOf((startcounter - 4) % 60) + "초");
+                            //게임 시작 후 경과시간 출력
+
+                            startcounter++;
+                            Log.v("알림", "타이머 종료");
+                        }
+                    });
+                }
+            };
+            timer2.schedule(abcd, 0, 1000);
+
+            screen_dark2.setVisibility(View.INVISIBLE);
+            menu.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    //    public void Click_Input(View v){
 //        input_number_first = Integer.parseInt(number_first.getText().toString());//String을 int로 변환
 //        input_number_second = Integer.parseInt(number_second.getText().toString());
 //        input_number_third = Integer.parseInt(number_third.getText().toString());
@@ -347,24 +473,28 @@ public class gamestart_4 extends AppCompatActivity {
 
     public void Click_Delete(View v)//텍스트뷰에 있는 글자들을 모두 초기 상태로 돌림.
     {
-        number_first.setText("?");
-        number_second.setText("?");
-        number_third.setText("?");
+        TextView[] textview = {number_first, number_second, number_third, number_fourth};
+        for(int i=0; i < textview.length;i++){
+            textview[i].setText("?");
+            textview[i].setTextColor(Color.BLACK);
+        }
+
     }
-    public void game4_move(View v)
-    {
+
+    public void game4_move(View v) {
         Intent game4move = new Intent(this, gamestart_4.class);
         startActivity(game4move);
         finish();
     }
-    public void exit(View v){
+
+    public void exit(View v) {
         Intent main_move = new Intent(this, MainActivity.class);
         startActivity(main_move);
         finish();
     }
 
 
-//    public void Click_Number(View v) //
+    //    public void Click_Number(View v) //
 //    {
 //        //if (!minView.getText().toString().trim().equals("--")) //텍스트뷰 값 비교할 때 사용 가능한 문장.
 //        if (number_first.getText().toString().equals("?")) number_first.setText("abcde");
@@ -373,13 +503,14 @@ public class gamestart_4 extends AppCompatActivity {
 //        else if(number_second.getText().toString().equals("?")) number_second.setText("fghijk");
 //        else if(number_third.getText().toString().equals("?")) number_third.setText("fghijk");
 //    }
-    private void writeNewUser(int type, String name, int times, int play_times){
+    private void writeNewUser(int type, String name, int times, int play_times) {
         Rank_base rank = new Rank_base(type, name, times, play_times);
         mDatabase.child("users").push().setValue(rank); // push() - 시간 순서에 따라 임의의 키 값을 생성한다.
     }
-    public void rank_move()
-    {
+
+    public void rank_move() {
         Intent rankmove = new Intent(this, Ranking.class);
+        rankmove.putExtra("GAMETYPE", game_type);
         startActivity(rankmove);
         finish();
     }

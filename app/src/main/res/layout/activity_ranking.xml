@@ -15,47 +15,67 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="랭   킹"
+        android:text="Rank"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="30dp"
+        android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/type_b"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/type_a"
-        android:layout_alignBottom="@+id/type_a"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="4구"
-        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/type_a"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/type_a"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="8dp"
-        android:layout_toLeftOf="@+id/type_b"
-        android:layout_toStartOf="@+id/type_b"
-        android:text="3구"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/type_a"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_marginStart="168dp"
+            android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@+id/type_b"
+            android:layout_toStartOf="@+id/type_b"
+            android:layout_weight="1"
+            android:background="@drawable/xml_border"
+            android:text="3구"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <Button
+            android:id="@+id/type_b"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/type_a"
+            android:layout_alignBottom="@+id/type_a"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/xml_border"
+            android:text="4구"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/type_a"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,7 +90,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.918">
 
         <TextView
             android:id="@+id/textView4"
