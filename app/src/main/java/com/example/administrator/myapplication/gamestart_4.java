@@ -77,6 +77,7 @@ public class gamestart_4 extends AppCompatActivity {
 
     Handler mHandler = new Handler();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {//최초로 화면이 나올 때 한 번 실행
         super.onCreate(savedInstanceState);
@@ -323,7 +324,7 @@ public class gamestart_4 extends AppCompatActivity {
                         textview[i].setTextColor(Color.BLACK);
                     }
                     if (strike == 4) {//게임 종료 후 메뉴 출력. 랭킹 등록, 나가기, 새로 시작하기 등을 제공.
-
+                        timer.cancel();
                         screen_dark.setVisibility(View.VISIBLE);
                         ConstraintLayout endmenu = (ConstraintLayout) findViewById(R.id.endmenu_xml);
                         endmenu.setVisibility(View.VISIBLE);
@@ -360,8 +361,8 @@ public class gamestart_4 extends AppCompatActivity {
                                     Toast.makeText(gamestart_4.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
                                 else {
                                     String username = nameedit.getText().toString();
-                                    writeNewUser(game_type, username, gameover_playtimes, gameover_playtimes);
-                                    rank_move();
+                                    writeNewUser(game_type, username, input_num[0], gameover_playtimes);
+                                    rank_move(username, input_num[0], gameover_playtimes);
                                 }
                             }
                         };
@@ -508,9 +509,12 @@ public class gamestart_4 extends AppCompatActivity {
         mDatabase.child("users").push().setValue(rank); // push() - 시간 순서에 따라 임의의 키 값을 생성한다.
     }
 
-    public void rank_move() {
+    public void rank_move(String username, int times, int play_times) {
         Intent rankmove = new Intent(this, Ranking.class);
         rankmove.putExtra("GAMETYPE", game_type);
+        rankmove.putExtra("USERNAME", username);
+        rankmove.putExtra("TIMES", times);
+        rankmove.putExtra("PLAYTIMES", play_times);
         startActivity(rankmove);
         finish();
     }

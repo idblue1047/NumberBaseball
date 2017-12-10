@@ -20,13 +20,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Ranking extends AppCompatActivity implements View.OnClickListener {
+public class Ranking extends AppCompatActivity implements View.OnClickListener{
 
     public static int game_type = 3;
+    public static String play_username = "";
+    public static int play_times = 0;
+    public static int play_playtimes = 0;
 
     public static ArrayList<Rank_base> Origins = new ArrayList<Rank_base>();
 
@@ -71,7 +75,9 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
         //3구를 끝내고 랭킹으로 오면 3구 랭킹을, 4구는 4구 랭킹을 보여주기 위해 값을 받아옴.
         Intent intent = getIntent();
         game_type = intent.getIntExtra("GAMETYPE", 3);
-
+        play_username = intent.getStringExtra("USERNAME");
+        play_times = intent.getIntExtra("TIMES", 0);
+        play_playtimes = intent.getIntExtra("PLAYTIMES", 0);
 
         Button_Select();
 
@@ -86,17 +92,31 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
                 Rank_base ranktest = dataSnapshot.getValue(Rank_base.class);
 
                 if(ranktest == null) {
-                    Log.d("_test", "null: " + dataSnapshot.getKey() + " , " + dataSnapshot.getValue().toString());
+                    Log.d("_teststart", "null: " + dataSnapshot.getKey() + " , " + dataSnapshot.getValue().toString());
                     return;
                 }
 
-                list.add(ranktest);
+                list.add(ranktest);//time순서로 정렬된 자료들을 list에 저장.
+                Log.d("_testend", "null: " + dataSnapshot.getKey() + " , " + dataSnapshot.getValue().toString());
+
+
+                ///////정렬 테스트 중 //////
+
+                Collections.sort(list, Rank_base.Rank_mulitplessort);
+
+
+                ///////////정렬 테스트 끝//////
+
                 recyclerViewAdapter.notifyDataSetChanged();
 
 
                 Origins.clear();
                 Origins.addAll(recyclerViewAdapter.getSubjectValues());
 
+
+                //원래 시작때는 3구 4구 구별 없이 모든 데이터를 뿜어내서 랭킹 화면을 들어가자마자 구별할 수 있도록(기본 3구) 아래 코드를 만든건데
+                //지금 생각해도 대체 왜 handler와 timetask를 이용해야 제대로 출력이 된건지 알 수가 없다. 이것들을 사용하지 않으면 아예 데이터가 안 뜬다.
+                //이 바로 위 코드들이 통합 데이터 출력인데도 말이다...
                 final Handler mhandler = new Handler();
                 TimerTask tt = new TimerTask() {
                     @Override
@@ -161,11 +181,9 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
             ArrayList<Rank_base> arrayList_match = new ArrayList<>();
 
             for(int k=0; k<arrayList.size(); k++) {
-
                 if ( arrayList.get(k).type == 3 ) {
                     arrayList_match.add(arrayList.get(k));
                 }
-
             }
 
             recyclerViewAdapter.setSubjectValues(arrayList_match);
@@ -257,6 +275,8 @@ public class Ranking extends AppCompatActivity implements View.OnClickListener {
             type_b.setTextSize(18);
         }
     }
+
+
 
 }
 

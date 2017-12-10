@@ -8,19 +8,22 @@
         android:id="@+id/rank_num_xml"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:text="117위"
+        android:textAlignment="center"
         android:textColor="@android:color/background_dark"
         android:textSize="16dp" />
 
     <TextView
         android:id="@+id/username_xml"
-        android:layout_width="160dp"
+        android:layout_width="121dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="7dp"
-        android:text="이름들.10글자까지"
+        android:text="일곱글자까지만"
+        android:textAlignment="center"
         android:textColor="@android:color/background_dark"
         android:textSize="16dp" />
 
@@ -30,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="27번"
+        android:textAlignment="center"
         android:textColor="@android:color/background_dark"
         android:textSize="16dp" />
 
@@ -38,7 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView"
+        android:text="12분 08초"
+        android:textAlignment="center"
         android:textColor="@android:color/background_dark"
         android:textSize="16dp" />
 

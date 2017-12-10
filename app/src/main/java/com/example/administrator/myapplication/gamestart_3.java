@@ -150,10 +150,12 @@ public class gamestart_3 extends AppCompatActivity {
                                 else {
                                     number_second.setTextColor(Color.BLACK);
                                     if (number_third.getText().toString().equals("?")) {
-                                        if (startcounter % 2 == 0) number_third.setTextColor(Color.RED);
-                                        else if (startcounter % 2 == 1) number_third.setTextColor(Color.YELLOW);
-                                        else number_third.setTextColor(Color.BLACK);
+                                        if (startcounter % 2 == 0)
+                                            number_third.setTextColor(Color.RED);
+                                        else if (startcounter % 2 == 1)
+                                            number_third.setTextColor(Color.YELLOW);
                                     }
+                                    else number_third.setTextColor(Color.BLACK);
                                 }
                             }
                         }
@@ -278,6 +280,7 @@ public class gamestart_3 extends AppCompatActivity {
 
                     /////////////////////////////모두 스트라이크가 되어서 게임을 종료/////////////////////////
                     if(strike == 3) {//게임 종료 후 메뉴 출력. 랭킹 등록, 나가기, 새로 시작하기 등을 제공.
+                        timer.cancel();
                         screen_dark.setVisibility(View.VISIBLE);
                         ConstraintLayout menu = (ConstraintLayout) findViewById(R.id.endmenu_xml);
                         menu.setVisibility(View.VISIBLE);
@@ -314,12 +317,12 @@ public class gamestart_3 extends AppCompatActivity {
                         View.OnClickListener rankinput = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(nameedit.getText().toString().equals(""))
+                                if (nameedit.getText().toString().equals(""))
                                     Toast.makeText(gamestart_3.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
                                 else {
                                     String username = nameedit.getText().toString();
-                                    writeNewUser(game_type, username, gameover_times, gameover_playtimes);
-                                    rank_move();
+                                    writeNewUser(game_type, username, input_num[0], gameover_playtimes);
+                                    rank_move(username, input_num[0], gameover_playtimes);
                                 }
                             }
                         };
@@ -451,10 +454,12 @@ public class gamestart_3 extends AppCompatActivity {
         Rank_base rank = new Rank_base(type, name, times, play_times);
         mDatabase.child("users").push().setValue(rank); // push() - 시간 순서에 따라 임의의 키 값을 생성한다.
     }
-    public void rank_move()
-    {
+    public void rank_move(String username, int times, int play_times) {
         Intent rankmove = new Intent(this, Ranking.class);
         rankmove.putExtra("GAMETYPE", game_type);
+        rankmove.putExtra("USERNAME", username);
+        rankmove.putExtra("TIMES", times);
+        rankmove.putExtra("PLAYTIMES", play_times);
         startActivity(rankmove);
         finish();
     }
